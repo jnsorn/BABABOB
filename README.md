@@ -24,4 +24,4 @@
 진행 상황
 ==
 ### 11-11
-readme update
+소린: readme 추가, tab에 이미지 추가

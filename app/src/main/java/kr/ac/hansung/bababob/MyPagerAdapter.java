@@ -42,6 +42,18 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+    public int getIcon(int position){
+        switch (position) {
+            case 0:
+                return R.drawable.restaurant;
+            case 1:
+                return R.drawable.shop;
+            case 2:
+                return R.drawable.chat;
+            default:
+                return 0;
+        }
+    }
     @Override
     public int getCount() {
         return PAGE_NUM;
