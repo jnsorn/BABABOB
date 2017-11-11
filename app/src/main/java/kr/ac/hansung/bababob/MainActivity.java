@@ -1,10 +1,9 @@
 package kr.ac.hansung.bababob;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.TableLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,5 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout mTab = (TabLayout) findViewById(R.id.tabs);
         mTab.setupWithViewPager(mViewPager);
+
+        for(int i=0; i<mViewPager.getAdapter().getCount(); i++){
+            mTab.getTabAt(i).setIcon(mPagerAdapter.getIcon(i));
+        }
     }
 }
