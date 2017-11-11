@@ -34,7 +34,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return "Restaurant";
             case 1:
-                return "SchoolCafeteria";
+                return "School Cafeteria";
             case 2:
                 return "Chatting";
             default:
