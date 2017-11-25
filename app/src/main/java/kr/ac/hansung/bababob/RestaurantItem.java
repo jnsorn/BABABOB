@@ -1,12 +1,12 @@
 package kr.ac.hansung.bababob;
 
-public class RestaurantContact {
+public class RestaurantItem {
     private String restaurantName;
     private String restaurantImg;
 
-    public RestaurantContact(String Img, String name) {
-        restaurantImg = Img;
+    public RestaurantItem(String name, String Img) {
         restaurantName = name;
+        restaurantImg = Img;
     }
 
     public String getName() {
@@ -17,5 +17,11 @@ public class RestaurantContact {
        return restaurantImg;
     }
 
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
 
+    public void setRestaurantImg(String restaurantImg) {
+        this.restaurantImg = restaurantImg;
+    }
 }
