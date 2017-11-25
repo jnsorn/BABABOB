@@ -57,7 +57,6 @@ public class RestaurantFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         listItem = new ArrayList<>();
         restaurantAdapter = new RestaurantAdapter();
-
         recyclerView.setAdapter(restaurantAdapter);
         database = FirebaseDatabase.getInstance();
         GetDataFirebase();

@@ -29,7 +29,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         public void onClick(View v) {
             Message message = new Message();
             Bundle bundle = new Bundle();
-            bundle.putString("Restaurant",restaurantName.getText().toString());
+            bundle.putString("RestaurantName",restaurantName.getText().toString());
             bundle.putString("message", "showInfoActivity");
             message.setData(bundle);
             MainActivity.myHandler.sendMessage(message);

@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             String message = msg.getData().getString("message");
             if(message.equals("showInfoActivity")){
                 Intent intent = new Intent(getApplicationContext(),RestaurantInfoActivity.class);
-                intent.putExtra("Restaurant",msg.getData().getString("Restaurant"));
+                intent.putExtra("RestaurantName",msg.getData().getString("RestaurantName"));
                 startActivity(intent);
             }
 
