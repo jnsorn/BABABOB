@@ -5,4 +5,14 @@ package kr.ac.hansung.bababob.SchoolCafeteria;
  */
 
 public class SchoolCafeteriaMenu {
+
+    private String menu;
+
+    public SchoolCafeteriaMenu(String menu){
+        this.menu = menu;
+    }
+
+    public String getMenu() {
+        return menu;
+    }
 }

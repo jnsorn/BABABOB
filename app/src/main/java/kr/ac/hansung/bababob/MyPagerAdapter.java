@@ -1,14 +1,11 @@
-package kr.ac.hansung.bababob.SchoolCafeteria;
+package kr.ac.hansung.bababob;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import kr.ac.hansung.bababob.ChattingFragment;
-import kr.ac.hansung.bababob.R;
-import kr.ac.hansung.bababob.RestaurantFragment;
+import kr.ac.hansung.bababob.Restaurant.RestaurantFragment;
 import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaFragment;
-
 /**
  * Created by Jina on 2017-11-11.
  */

@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -12,37 +14,52 @@ import java.util.List;
 import kr.ac.hansung.bababob.R;
 
 /**
- * Created by Jina on 2017-11-13.
+ * Created by Jina on 2017-11-26.
  */
 
-public class SchoolMenuAdapter extends RecyclerView.Adapter<SchoolMenuAdapter.ViewHolder>{
+
+public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteriaAdapter.ViewHolder>{
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView menuTextView;
+        private TextView cafeteriaTextView;
+        private ImageButton cafeteriaDetailBtn;
+        private boolean isCafeteriaDetailOpen = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            menuTextView = (TextView) itemView.findViewById(R.id.menu_name);
-            menuTextView.setOnClickListener(this);
+            cafeteriaTextView = (TextView) itemView.findViewById(R.id.cafeteria_name);
+            cafeteriaDetailBtn = (ImageButton) itemView.findViewById(R.id.cafeteria_detail_button) ;
+            cafeteriaDetailBtn.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            int position = getLayoutPosition();
+            switch (view.getId()){
+                case R.id.cafeteria_detail_button:{
+                    if(!isCafeteriaDetailOpen){
+                        cafeteriaDetailBtn.animate().rotation(180).start();
+                        isCafeteriaDetailOpen = true;
+                    }else if(isCafeteriaDetailOpen){
+                        cafeteriaDetailBtn.animate().rotation(0).start();
+                        isCafeteriaDetailOpen = false;
+                    }
+                    break;
+                }
+            }
         }
     }
 
-    private List<StudentMenu> mMenus;
     private Context mContext;
+    private List<SchoolCafeteria> mCafeterias;
 
-    public SchoolMenuAdapter(Context context, List<StudentMenu> menus) {
-        mMenus = menus;
+    public SchoolCafeteriaAdapter(Context context, List<SchoolCafeteria> cafeterias) {
         mContext = context;
+        mCafeterias = cafeterias;
     }
 
     @Override
-    public SchoolMenuAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SchoolCafeteriaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View contactView = inflater.inflate(R.layout.school_cafeteria_item, parent, false);
@@ -51,16 +68,14 @@ public class SchoolMenuAdapter extends RecyclerView.Adapter<SchoolMenuAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(SchoolMenuAdapter.ViewHolder holder, int position) {
-        // Get the data model based on position
-        StudentMenu menu = mMenus.get(position);
-        // Set item views based on your views and data model
-        TextView textView = holder.menuTextView;
-        textView.setText(menu.getMenu());
+    public void onBindViewHolder(SchoolCafeteriaAdapter.ViewHolder holder, int position) {
+        SchoolCafeteria cafeteria = mCafeterias.get(position);
+        TextView textView = holder.cafeteriaTextView;
+        textView.setText(cafeteria.getCafeteria());
     }
 
     @Override
     public int getItemCount() {
-        return mMenus.size();
+        return mCafeterias.size();
     }
 }
