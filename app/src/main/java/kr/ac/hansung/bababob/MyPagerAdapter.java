@@ -1,8 +1,13 @@
-package kr.ac.hansung.bababob;
+package kr.ac.hansung.bababob.SchoolCafeteria;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import kr.ac.hansung.bababob.ChattingFragment;
+import kr.ac.hansung.bababob.R;
+import kr.ac.hansung.bababob.RestaurantFragment;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaFragment;
 
 /**
  * Created by Jina on 2017-11-11.
@@ -28,13 +33,13 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
                 return null;
         }
     }
-
+    @Override
     public String getPageTitle(int position){
         switch (position) {
             case 0:
                 return "Restaurant";
             case 1:
-                return "School Cafeteria";
+                return "School Menu";
             case 2:
                 return "Chatting";
             default:
@@ -45,9 +50,9 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public int getIcon(int position){
         switch (position) {
             case 0:
-                return R.drawable.restaurant;
-            case 1:
                 return R.drawable.shop;
+            case 1:
+                return R.drawable.restaurant;
             case 2:
                 return R.drawable.chat;
             default:
