@@ -20,36 +20,6 @@ import kr.ac.hansung.bababob.R;
 
 public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteriaAdapter.ViewHolder>{
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private TextView cafeteriaTextView;
-        private ImageButton cafeteriaDetailBtn;
-        private boolean isCafeteriaDetailOpen = false;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            cafeteriaTextView = (TextView) itemView.findViewById(R.id.cafeteria_name);
-            cafeteriaDetailBtn = (ImageButton) itemView.findViewById(R.id.cafeteria_detail_button) ;
-            cafeteriaDetailBtn.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.cafeteria_detail_button:{
-                    if(!isCafeteriaDetailOpen){
-                        cafeteriaDetailBtn.animate().rotation(180).start();
-                        isCafeteriaDetailOpen = true;
-                    }else if(isCafeteriaDetailOpen){
-                        cafeteriaDetailBtn.animate().rotation(0).start();
-                        isCafeteriaDetailOpen = false;
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
     private Context mContext;
     private List<SchoolCafeteria> mCafeterias;
 
@@ -77,5 +47,44 @@ public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteria
     @Override
     public int getItemCount() {
         return mCafeterias.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView cafeteriaTextView;
+        private String cafeteria;
+        private ImageButton cafeteriaDetailBtn;
+        private boolean isCafeteriaDetailOpen = false;
+        private RecyclerView rvSchoolCafeteriaMenu;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            cafeteriaTextView = (TextView) itemView.findViewById(R.id.cafeteria_name);
+            cafeteria = cafeteriaTextView.getText().toString();
+            cafeteriaDetailBtn = (ImageButton) itemView.findViewById(R.id.cafeteria_detail_button);
+            cafeteriaDetailBtn.setOnClickListener(this);
+
+            rvSchoolCafeteriaMenu = (RecyclerView) itemView.findViewById(R.id.school_cafeteria_menu_recycler_view);
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.cafeteria_detail_button:{
+                    if(!isCafeteriaDetailOpen){
+                        cafeteriaDetailBtn.animate().rotation(180).start();
+                        SchoolCafeteriaMenuAdapter adapter = new SchoolCafeteriaMenuAdapter(mContext,SchoolCafeteriaMenu.getMenus(cafeteria));
+                        rvSchoolCafeteriaMenu.setAdapter(adapter);
+                        isCafeteriaDetailOpen = true;
+                    }else if(isCafeteriaDetailOpen){
+                        cafeteriaDetailBtn.animate().rotation(0).start();
+                        rvSchoolCafeteriaMenu.setAdapter(null);
+                        //rvSchoolCafeteriaMenu.removeAllViewsInLayout();
+                        isCafeteriaDetailOpen = false;
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

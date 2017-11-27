@@ -20,7 +20,6 @@ import kr.ac.hansung.bababob.R;
  */
 public class SchoolCafeteriaFragment extends Fragment {
 
-    ArrayList<SchoolCafeteria> cafeterias;
     RecyclerView rvSchoolCafeteria;
 
     private static SchoolCafeteriaFragment instance;
@@ -49,9 +48,5 @@ public class SchoolCafeteriaFragment extends Fragment {
 
         SchoolCafeteriaAdapter adapter = new SchoolCafeteriaAdapter(getActivity(),SchoolCafeteria.getCafeterias());
         rvSchoolCafeteria.setAdapter(adapter);
-        rvSchoolCafeteria.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //rvFoodMenu.setHasFixedSize(true);
-
-        //adapter.notifyDataSetChanged();
     }
 }
