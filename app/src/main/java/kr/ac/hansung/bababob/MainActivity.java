@@ -9,12 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
-import kr.ac.hansung.bababob.Restaurant.RestaurantInfoActivity;
-
 public class MainActivity extends AppCompatActivity {
 
-    public static MyHandler myHandler;
-
+    static  MyHandler myHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myHandler = new MyHandler();
+
         MyPagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(mPagerAdapter);
@@ -36,17 +34,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    class MyHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            String message = msg.getData().getString("message");
+            if(message.equals("showInfoActivity")){
+                Intent intent = new Intent(getApplicationContext(),RestaurantInfoActivity.class);
+                intent.putExtra("RestaurantName",msg.getData().getString("RestaurantName"));
+                startActivity(intent);
+            }
 
-     public class MyHandler extends Handler{
-         @Override
-         public void handleMessage(Message msg) {
-             super.handleMessage(msg);
-             String message = msg.getData().getString("message");
-             if(message.equals("showInfoActivity")){
-                 Intent intent = new Intent(getApplicationContext(),RestaurantInfoActivity.class);
-                 intent.putExtra("RestaurantName",msg.getData().getString("RestaurantName"));
-                 startActivity(intent);
-             }
-         }
-     }
+        }
+    }
 }

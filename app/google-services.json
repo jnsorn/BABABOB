@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "617864454083-dt258h3c1bk29q505oqrjh8fopvt99v6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "kr.ac.hansung.bababob",
-            "certificate_hash": "da2520c2612bc26d1c7408d7e8296c1c378c08d5"
-          }
-        },
-        {
           "client_id": "617864454083-bt1modpad1ppfs43i2svoh4o2in09dtn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
