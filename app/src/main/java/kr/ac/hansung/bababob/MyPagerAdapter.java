@@ -4,6 +4,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import kr.ac.hansung.bababob.Restaurant.RestaurantFragment;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaFragment;
+
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
     private static int PAGE_NUM = 3;
