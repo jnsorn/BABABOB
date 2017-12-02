@@ -90,7 +90,7 @@ public class RestaurantInfoActivity extends AppCompatActivity implements OnMapRe
                 googleMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
             }
-
+//
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
