@@ -38,7 +38,7 @@ public class RestaurantInfoActivity extends AppCompatActivity implements OnMapRe
     private ImageView takeout_img, delivery_img;
     private Button tel_btn;
 
-//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
