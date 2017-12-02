@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "617864454083",
+    "firebase_url": "https://bababob-f5b37.firebaseio.com",
+    "project_id": "bababob-f5b37",
+    "storage_bucket": "bababob-f5b37.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:617864454083:android:1ac99495b9426623",
+        "android_client_info": {
+          "package_name": "kr.ac.hansung.bababob"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "617864454083-bt1modpad1ppfs43i2svoh4o2in09dtn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.ac.hansung.bababob",
+            "certificate_hash": "4d523c537bd310aab109d07d4b13d453ccb853d7"
+          }
+        },
+        {
+          "client_id": "617864454083-mkrsn1hakjs7mgf0q8ai4ts08mrv3s1f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeWoy_p-GV3xUAURqbHf2vRX6VQZDpH4A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "617864454083-mkrsn1hakjs7mgf0q8ai4ts08mrv3s1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
