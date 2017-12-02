@@ -40,13 +40,16 @@ public class SchoolCafeteriaMenuAdapter extends RecyclerView.Adapter<SchoolCafet
         TextView textView1 = holder.cafeteriaMenuTextView;
         TextView textView2 = holder.cafeteriaMenuPriceTextView;
         textView1.setText(cafeteria.getMenu());
-        textView2.setText(cafeteria.getPrice());
+        if(!cafeteria.getPrice().equals("0"))
+            textView2.setText(cafeteria.getPrice());
     }
 
     @Override
     public int getItemCount() {
         return mMenus.size();
     }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

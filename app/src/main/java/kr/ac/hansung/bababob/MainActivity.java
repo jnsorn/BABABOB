@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import kr.ac.hansung.bababob.Restaurant.RestaurantInfoActivity;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaInfoActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,10 +42,16 @@ public class MainActivity extends AppCompatActivity {
          @Override
          public void handleMessage(Message msg) {
              super.handleMessage(msg);
-             String message = msg.getData().getString("message");
-             if(message.equals("showInfoActivity")){
-                 Intent intent = new Intent(getApplicationContext(),RestaurantInfoActivity.class);
-                 intent.putExtra("RestaurantName",msg.getData().getString("RestaurantName"));
+             Bundle bundle = msg.getData();
+             String activity = bundle.getString("change");
+             if(activity.equals("RestaurantInfoActivity")){
+                 Intent intent = new Intent(getApplicationContext(), RestaurantInfoActivity.class);
+                 intent.putExtra("RestaurantName", bundle.getString("RestaurantName"));
+                 startActivity(intent);
+             }
+             else if(activity.equals("SchoolCafeteriaInfoActivity")){
+                 Intent intent = new Intent(getApplicationContext(), SchoolCafeteriaInfoActivity.class);
+                 intent.putExtra("CafeteriaName", bundle.getInt("CafeteriaName"));
                  startActivity(intent);
              }
          }
