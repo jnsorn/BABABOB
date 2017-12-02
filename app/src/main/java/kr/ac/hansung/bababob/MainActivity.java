@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
         setContentView(R.layout.activity_main);
-//
+        //
         myHandler = new MyHandler();
         MyPagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         ViewPager mViewPager = (ViewPager) findViewById(R.id.viewpager);
