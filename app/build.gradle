@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "kr.ac.hansung.bababob"
@@ -26,13 +26,25 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support:support-v4:25.3.1'
+    /* Firebase-auth */
     compile 'com.google.firebase:firebase-auth:11.0.4'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    /* recyclerView */
+    /* Glide */
+    compile 'com.github.bumptech.glide:glide:4.1.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
+    compile 'com.firebaseui:firebase-ui-storage:0.6.0'
+    compile 'jp.wasabeef:glide-transformations:1.0.6@aar'
+    /* Google Play Services 설정 */
+    compile 'com.google.android.gms:play-services-location:11.0.4'
+    /* 위치 접근에 필요한 권한 얻기 */
+    compile 'pub.devrel:easypermissions:1.0.1'
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
     testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:design:27.0.1'
+    implementation 'com.android.support:support-v4:27.0.1'
+    implementation 'com.android.support:recyclerview-v7:27.0.1'
     implementation 'com.android.support:cardview-v7:27.0.1'
 }
+
 apply plugin: 'com.google.gms.google-services'
