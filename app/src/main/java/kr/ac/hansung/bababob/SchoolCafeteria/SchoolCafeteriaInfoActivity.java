@@ -16,7 +16,7 @@ public class SchoolCafeteriaInfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
         setContentView(R.layout.activity_school_cafeteria_info);
-
+  //
         Intent intent = getIntent();
         int cafeteriaName = intent.getIntExtra("CafeteriaName",SchoolCafeteria.PROFESSOR_CAFETERIA);
 
