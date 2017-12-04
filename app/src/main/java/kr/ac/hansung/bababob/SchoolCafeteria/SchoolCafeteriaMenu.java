@@ -1,6 +1,7 @@
 package kr.ac.hansung.bababob.SchoolCafeteria;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Jina on 2017-11-25.
@@ -40,9 +41,10 @@ public class SchoolCafeteriaMenu {
         switch (num) {
             case SchoolCafeteria.PROFESSOR_CAFETERIA: {
                 menus.add(new SchoolCafeteriaMenu("중식", 0));
-                menus.add(new SchoolCafeteriaMenu("중식 메뉴!!", 4500));
+
+                menus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2].getLunch());
                 menus.add(new SchoolCafeteriaMenu("석식", 0));
-                menus.add(new SchoolCafeteriaMenu("석식 메뉴!!", 4500));
+                menus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2].getDinner());
                 break;
             }
             case SchoolCafeteria.STUDENT_CAFETERIA: {

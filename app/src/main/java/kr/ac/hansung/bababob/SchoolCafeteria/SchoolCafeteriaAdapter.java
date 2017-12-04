@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -59,6 +60,7 @@ public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteria
         private TextView cafeteriaTimeTextView;
         private ImageButton cafeteriaDetailBtn;
         private TextView cafeteriaBtn;
+        private LinearLayout cafeteriaBtnLayout;
         private boolean isCafeteriaDetailOpen = false;
         private RecyclerView rvSchoolCafeteriaMenu;
 
@@ -68,6 +70,8 @@ public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteria
             cafeteriaTimeTextView = (TextView) itemView.findViewById(R.id.cafeteria_time);
             cafeteriaDetailBtn = (ImageButton) itemView.findViewById(R.id.cafeteria_detail_button);
             cafeteriaDetailBtn.setOnClickListener(this);
+            cafeteriaBtnLayout = (LinearLayout) itemView.findViewById(R.id.cafeteria_detail_button_layout);
+            cafeteriaBtnLayout.setOnClickListener(this);
             rvSchoolCafeteriaMenu = (RecyclerView) itemView.findViewById(R.id.school_cafeteria_menu_recycler_view);
             cafeteriaBtn = (TextView) itemView.findViewById(R.id.cafeteria_menu_more);
             cafeteriaBtn.setOnClickListener(this);
@@ -77,31 +81,26 @@ public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteria
 
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.cafeteria_detail_button:{
-                    if(!isCafeteriaDetailOpen){
-                        cafeteriaDetailBtn.animate().rotation(180).start();
-                        SchoolCafeteriaMenuAdapter adapter = new SchoolCafeteriaMenuAdapter(mContext,SchoolCafeteriaMenu.getMenus(getLayoutPosition()));
-                        rvSchoolCafeteriaMenu.setAdapter(adapter);
-                        cafeteriaBtn.setVisibility(View.VISIBLE);
-                        isCafeteriaDetailOpen = true;
-                    }else if(isCafeteriaDetailOpen){
-                        cafeteriaDetailBtn.animate().rotation(0).start();
-                        rvSchoolCafeteriaMenu.setAdapter(null);
-                        cafeteriaBtn.setVisibility(View.GONE);
-                        isCafeteriaDetailOpen = false;
-                    }
-                    break;
+            if(view.getId()==R.id.cafeteria_detail_button_layout || view.getId()==R.id.cafeteria_detail_button){
+                if(!isCafeteriaDetailOpen){
+                    cafeteriaDetailBtn.animate().rotation(180).start();
+                    SchoolCafeteriaMenuAdapter adapter = new SchoolCafeteriaMenuAdapter(mContext,SchoolCafeteriaMenu.getMenus(getLayoutPosition()));
+                    rvSchoolCafeteriaMenu.setAdapter(adapter);
+                    cafeteriaBtn.setVisibility(View.VISIBLE);
+                    isCafeteriaDetailOpen = true;
+                }else if(isCafeteriaDetailOpen){
+                    cafeteriaDetailBtn.animate().rotation(0).start();
+                    rvSchoolCafeteriaMenu.setAdapter(null);
+                    cafeteriaBtn.setVisibility(View.GONE);
+                    isCafeteriaDetailOpen = false;
                 }
-                case R.id.cafeteria_menu_more:{
-                    Bundle bundle = new Bundle();
-                    bundle.putString("change", "SchoolCafeteriaInfoActivity");
-                    bundle.putInt("CafeteriaName",getLayoutPosition());
-                    Message message = new Message();
-                    message.setData(bundle);
-                    MainActivity.myHandler.sendMessage(message);
-                    break;
-                }
+            } else if(view.getId()==R.id.cafeteria_menu_more){
+                Bundle bundle = new Bundle();
+                bundle.putString("change", "SchoolCafeteriaInfoActivity");
+                bundle.putInt("CafeteriaName",getLayoutPosition());
+                Message message = new Message();
+                message.setData(bundle);
+                MainActivity.myHandler.sendMessage(message);
             }
         }
     }

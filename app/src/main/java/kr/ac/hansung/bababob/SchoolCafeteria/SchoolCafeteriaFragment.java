@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import kr.ac.hansung.bababob.R;
 
@@ -27,7 +35,9 @@ public class SchoolCafeteriaFragment extends Fragment {
 
     private static SchoolCafeteriaFragment instance;
     private RecyclerView rvSchoolCafeteria;
+
     public static ArrayList<SchoolCafeteriaMenu> schoolCafeteriaStudentMenus = new ArrayList<SchoolCafeteriaMenu>();
+    public static SchoolCafeteriaProfessorMenu[] schoolCafeteriaProfessorMenus= new SchoolCafeteriaProfessorMenu[5];
 
     public SchoolCafeteriaFragment() {
         // Required empty public constructor
@@ -54,6 +64,7 @@ public class SchoolCafeteriaFragment extends Fragment {
         SchoolCafeteriaAdapter adapter = new SchoolCafeteriaAdapter(getActivity(),SchoolCafeteria.getCafeterias());
         rvSchoolCafeteria.setAdapter(adapter);
 
+        //SchoolCafeteriaStudent
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("SchoolCafeteriaStudent").child("Menu");
         ref.addValueEventListener(new ValueEventListener() {
@@ -71,5 +82,60 @@ public class SchoolCafeteriaFragment extends Fragment {
 
             }
         });
+        //SchoolCafeteriaProfessor
+
+        setSchoolCafeteriaProfessorMenus();
+    }
+
+    public void setSchoolCafeteriaProfessorMenus(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final StringBuilder builder = new StringBuilder();
+
+                try {
+                    Document doc = Jsoup.connect("http://www.hansung.ac.kr/web/www/life_03_01_t2").get();
+                    Element tbody = doc.select("table").first();
+                    Elements rows = tbody.select("tr");
+
+                    for(int i=0; i<5; i++) {
+                        Elements tds = rows.get(1).select("td");
+                        String str = tds.get(i).text();
+                        String tmp = "";
+                        for (String string : str.split(" ")) {
+                            tmp += string + " / ";
+                        }
+                        schoolCafeteriaProfessorMenus[i] = new SchoolCafeteriaProfessorMenu();
+                        schoolCafeteriaProfessorMenus[i].setLunch(new SchoolCafeteriaMenu(tmp, 4500));
+                    }
+                    //Log.e("jina", Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_WEEK)));
+
+                    for(int i=0; i<5; i++) {
+                        Elements tds = rows.get(2).select("td");
+                        String str = tds.get(i+1).text();
+                        String tmp = "";
+                        for (String string : str.split(" ")) {
+                            if(!string.equals(""))
+                                tmp += string + " / ";
+                        }
+                        //schoolCafeteriaProfessorMenus[i] = new SchoolCafeteriaProfessorMenu();
+                        schoolCafeteriaProfessorMenus[i].setDinner(new SchoolCafeteriaMenu(tmp, 4500));
+                    }
+//                    for(int i=0;i<arr.size();i++){
+//                        builder.append(arr.get(i));
+//                    }
+
+//                    builder.append(tds.get(1).text()).append("\n");
+//                    builder.append(tds.get(2).text()).append("\n");
+//                    builder.append(tds.get(3).text()).append("\n");
+//                    builder.append(tds.get(4).text()).append("\n");
+
+                    //Elements tds2 = rows.get(2).select("td");
+                    // builder.append(tds2.get(0).text()).append("\n");
+                } catch (IOException e) {
+                    builder.append("Error : ").append(e.getMessage()).append("\n");
+                }
+            }
+        }).start();
     }
 }

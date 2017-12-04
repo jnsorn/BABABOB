@@ -11,7 +11,7 @@ public class SchoolCafeteria {
     public static final int PROFESSOR_CAFETERIA = 0;
     public static final int STUDENT_CAFETERIA = 1;
     public static final int MILGAOK = 2;
-
+    public static final String[] SCHOOLCAFETERIA = {"교직원 식당", "학생 식당", "밀가옥"};
     private String cafeteria;
     private String time;
 
