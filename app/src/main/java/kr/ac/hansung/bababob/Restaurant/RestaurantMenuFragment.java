@@ -4,21 +4,16 @@ package kr.ac.hansung.bababob.Restaurant;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.*;
 import android.view.*;
 import android.widget.*;
-
 import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
 import com.google.firebase.database.*;
-
-import org.w3c.dom.Text;
+import java.util.ArrayList;
+import java.util.List;
 
 import kr.ac.hansung.bababob.R;
 
@@ -30,9 +25,14 @@ public class RestaurantMenuFragment extends Fragment implements OnMapReadyCallba
     private double latitude, longitude;
     private GoogleMap googleMap;
     private Button tel_btn;
-    private String address, tel;
+    private String address, tel, menu;
+    private int price;
     static private String restaurantName;
     private TextView infoAddress;
+    private RecyclerView recyclerView;
+    List<RestaurantItem> listItem;
+
+    private RestaurantMenuAdapter restaurantMenuAdapter;
 
     public RestaurantMenuFragment() {
     }
@@ -54,13 +54,17 @@ public class RestaurantMenuFragment extends Fragment implements OnMapReadyCallba
 
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_restaurnt_menu, container, false);
-        SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        //MapsInitializer.initialize( getView().getContext());
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.menuList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("Restaurant").child(restaurantName);
-        infoAddress = (TextView)rootView.findViewById(R.id.infoAddress);
-        tel_btn = (Button)rootView.findViewById(R.id.tel_btn);
+        infoAddress = (TextView) rootView.findViewById(R.id.infoAddress);
+        tel_btn = (Button) rootView.findViewById(R.id.tel_btn);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,14 +100,41 @@ public class RestaurantMenuFragment extends Fragment implements OnMapReadyCallba
                 startActivity(intent);
             }
         });
-        //return inflater.inflate(R.layout.fragment_restaurnt_menu, container, false);
+
+
+        listItem = new ArrayList<>();
+        restaurantMenuAdapter = new RestaurantMenuAdapter();
+        recyclerView.setAdapter(restaurantMenuAdapter);
+        GetDataFirebase();
+
+
         return rootView;
+    }
+
+    void GetDataFirebase() {
+        myRef = database.getReference("Restaurant").child(restaurantName).child("Menu");
+        myRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    menu = snapshot.child("menu").getValue(String.class);
+                    price = snapshot.child("price").getValue(Integer.class);
+                    restaurantMenuAdapter.add(new RestaurantMenuItem(menu, price));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void makeMarker(GoogleMap googleMap, LatLng latLng) {
         MarkerOptions optFirst = new MarkerOptions();
         optFirst.position(latLng);// 위도 • 경도
-        optFirst.title(restaurantName);// 제목 미리보기
+        optFirst.title(restaurantName);
         optFirst.snippet(tel);
         optFirst.icon(BitmapDescriptorFactory.fromResource(R.drawable.pin));
         googleMap.addMarker(optFirst).showInfoWindow();
