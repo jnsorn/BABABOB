@@ -55,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
                  intent.putExtra("CafeteriaName", bundle.getInt("CafeteriaName"));
                  startActivity(intent);
              }
+             else if(activity.equals("ReviewWriteActivity")){
+                 Intent intent = new Intent(getApplicationContext(), ReviewWriteActivity.class);
+                 startActivity(intent);
+             }
          }
      }
 }
