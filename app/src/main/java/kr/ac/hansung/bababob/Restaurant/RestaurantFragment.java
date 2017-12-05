@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,12 +31,13 @@ import static java.security.AccessController.getContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RestaurantFragment extends Fragment {
+public class RestaurantFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
 
     private static RestaurantFragment instance;
     private RestaurantAdapter restaurantAdapter;
     private RecyclerView recyclerView;
+    private Spinner spinner;
     List<RestaurantItem> listItem;
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -66,6 +69,7 @@ public class RestaurantFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         GetDataFirebase();
 
+
     }
 
     void GetDataFirebase() {
@@ -87,5 +91,25 @@ public class RestaurantFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        //정렬 새로하기
+        switch (i) {
+            case 1: {
+                //이름 순
+            }
+            break;
+            case 2: {
+                //거리 순
+            }
+            break;
+            default:
+                break;
+        }
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
