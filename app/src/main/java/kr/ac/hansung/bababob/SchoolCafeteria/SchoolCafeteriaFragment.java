@@ -82,7 +82,6 @@ public class SchoolCafeteriaFragment extends Fragment {
 
             }
         });
-        //SchoolCafeteriaProfessor
 
         setSchoolCafeteriaProfessorMenus();
     }
@@ -108,7 +107,6 @@ public class SchoolCafeteriaFragment extends Fragment {
                         schoolCafeteriaProfessorMenus[i] = new SchoolCafeteriaProfessorMenu();
                         schoolCafeteriaProfessorMenus[i].setLunch(new SchoolCafeteriaMenu(tmp, 4500));
                     }
-                    //Log.e("jina", Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_WEEK)));
 
                     for(int i=0; i<5; i++) {
                         Elements tds = rows.get(2).select("td");
@@ -118,20 +116,9 @@ public class SchoolCafeteriaFragment extends Fragment {
                             if(!string.equals(""))
                                 tmp += string + " / ";
                         }
-                        //schoolCafeteriaProfessorMenus[i] = new SchoolCafeteriaProfessorMenu();
                         schoolCafeteriaProfessorMenus[i].setDinner(new SchoolCafeteriaMenu(tmp, 4500));
                     }
-//                    for(int i=0;i<arr.size();i++){
-//                        builder.append(arr.get(i));
-//                    }
 
-//                    builder.append(tds.get(1).text()).append("\n");
-//                    builder.append(tds.get(2).text()).append("\n");
-//                    builder.append(tds.get(3).text()).append("\n");
-//                    builder.append(tds.get(4).text()).append("\n");
-
-                    //Elements tds2 = rows.get(2).select("td");
-                    // builder.append(tds2.get(0).text()).append("\n");
                 } catch (IOException e) {
                     builder.append("Error : ").append(e.getMessage()).append("\n");
                 }
