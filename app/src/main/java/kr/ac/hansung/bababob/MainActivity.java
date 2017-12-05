@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
      public class MyHandler extends Handler{
          @Override
          public void handleMessage(Message msg) {
