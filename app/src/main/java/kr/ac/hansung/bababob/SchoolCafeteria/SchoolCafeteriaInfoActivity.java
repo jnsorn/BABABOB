@@ -23,7 +23,5 @@ public class SchoolCafeteriaInfoActivity extends AppCompatActivity {
 
         TextView name = (TextView) findViewById(R.id.cafeteria_name);
         name.setText(SchoolCafeteria.SCHOOLCAFETERIA[cafeteriaName]);
-
-
     }
 }

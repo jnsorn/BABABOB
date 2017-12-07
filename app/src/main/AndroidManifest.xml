@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD_2MyVNJbEog0ivlUKuGUeknCESSt8ZRQ" />
@@ -24,10 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Restaurant.RestaurantInfoActivity" />
         <activity android:name=".SchoolCafeteria.SchoolCafeteriaInfoActivity" />
-        <activity android:name=".ConnectionActivity" />
+        <activity android:name=".ConnectionActivity"></activity>
         <activity android:name=".ReviewWriteActivity"></activity>
     </application>
 

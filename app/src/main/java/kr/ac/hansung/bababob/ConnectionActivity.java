@@ -1,6 +1,8 @@
 package kr.ac.hansung.bababob;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +46,7 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
     private TextView mTextSignIn;
     private TextWatcher textWatcherUp;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +56,6 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
         initUI();
 
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -61,8 +63,8 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent it = new Intent(ConnectionActivity.this, MainActivity.class);
-                    startActivity(it);
+                    Intent itent = new Intent(ConnectionActivity.this, MainActivity.class);
+                    startActivity(itent);
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -83,6 +85,18 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mRelativeLayoutSignUp.getVisibility()==View.VISIBLE) {
+            mEditTextPasswordUp.setText("");
+            mEditTextEmailUp.setText("");
+            mRelativeLayoutSignUp.setVisibility(View.GONE);
+            mRelativeLayoutSignIn.setVisibility(View.VISIBLE);
+        }
+        else
+            super.onBackPressed();
     }
 
     public void initUI() {
@@ -169,6 +183,9 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            Intent intent = new Intent(ConnectionActivity.this, MainActivity.class);
+                            finish();
+                            startActivity(intent);
                         }
                     }
                 });
@@ -182,23 +199,23 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                        } else {
+                        if (!task.isSuccessful()) {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(ConnectionActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+                        } else {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Intent intent = new Intent(ConnectionActivity.this, MainActivity.class);
+                            finish();
+                            startActivity(intent);
                         }
                     }
                 });
         // [END create_user_with_email]
     }
-
 
     @Override
     public void onClick(View view) {

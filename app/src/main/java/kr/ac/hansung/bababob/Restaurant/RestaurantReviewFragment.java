@@ -45,6 +45,7 @@ public class RestaurantReviewFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("change", "ReviewWriteActivity");
+                bundle.putString("RestaurantName",restaurantName);
                 Message message = new Message();
                 message.setData(bundle);
                 MainActivity.myHandler.sendMessage(message);

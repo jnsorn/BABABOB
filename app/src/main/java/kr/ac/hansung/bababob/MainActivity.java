@@ -4,24 +4,47 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import kr.ac.hansung.bababob.Restaurant.RestaurantInfoActivity;
 import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaInfoActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static MyHandler myHandler;
+    private FirebaseAuth mAuth;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.actionbar);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user == null) {
+            finish();
+            return;
+        }
 
         myHandler = new MyHandler();
         MyPagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
@@ -35,11 +58,49 @@ public class MainActivity extends AppCompatActivity {
             mTab.getTabAt(i).setIcon(mPagerAdapter.getIcon(i));
         }
 
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        TextView textView = (TextView) headerView.findViewById(R.id.user_email);
+        textView.setText(mAuth.getCurrentUser().getEmail());
     }
 
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.START))
+            drawer.closeDrawer(GravityCompat.START);
+        else {
+            moveTaskToBack(true);
+            finish();
+        }
+    }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        if(id==R.id.edit_profile){
 
-     public class MyHandler extends Handler{
+        }else if(id == R.id.logout){
+            FirebaseAuth.getInstance().signOut();
+            Intent itent = new Intent(MainActivity.this, ConnectionActivity.class);
+            finish();
+            startActivity(itent);
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    public class MyHandler extends Handler{
          @Override
          public void handleMessage(Message msg) {
              super.handleMessage(msg);
@@ -57,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
              }
              else if(activity.equals("ReviewWriteActivity")){
                  Intent intent = new Intent(getApplicationContext(), ReviewWriteActivity.class);
+                 intent.putExtra("RestaurantName", bundle.getString("RestaurantName"));
                  startActivity(intent);
              }
          }
