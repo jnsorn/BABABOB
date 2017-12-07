@@ -47,12 +47,14 @@ public class RestaurantFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_restaurant, container, false);
+        View rootView = (View) inflater.inflate(R.layout.fragment_restaurant, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.restaurantList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-
+        listItem = new ArrayList<>();
+        restaurantAdapter = new RestaurantAdapter();
+        recyclerView.setAdapter(restaurantAdapter);
 
         return rootView;
     }
@@ -60,12 +62,8 @@ public class RestaurantFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listItem = new ArrayList<>();
-        restaurantAdapter = new RestaurantAdapter();
-        recyclerView.setAdapter(restaurantAdapter);
         database = FirebaseDatabase.getInstance();
         GetDataFirebase();
-
     }
 
     void GetDataFirebase() {

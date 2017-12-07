@@ -4,6 +4,7 @@ package kr.ac.hansung.bababob.SchoolCafeteria;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,12 +36,17 @@ public class SchoolCafeteriaFragment extends Fragment {
 
     private static SchoolCafeteriaFragment instance;
     private RecyclerView rvSchoolCafeteria;
-
+    private SchoolCafeteriaAdapter adapter;
     public static ArrayList<SchoolCafeteriaMenu> schoolCafeteriaStudentMenus = new ArrayList<SchoolCafeteriaMenu>();
     public static SchoolCafeteriaProfessorMenu[] schoolCafeteriaProfessorMenus= new SchoolCafeteriaProfessorMenu[5];
 
     public SchoolCafeteriaFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     public static SchoolCafeteriaFragment getInstance(){
@@ -52,18 +58,17 @@ public class SchoolCafeteriaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("jina","frag onCreateView");
         View view = inflater.inflate(R.layout.fragment_school_cafeteria, container, false);
         rvSchoolCafeteria = (RecyclerView) view.findViewById(R.id.school_cafeteria_recycler_view);
+        adapter = new SchoolCafeteriaAdapter(getActivity(),SchoolCafeteria.getCafeterias());
+        rvSchoolCafeteria.setAdapter(adapter);
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        SchoolCafeteriaAdapter adapter = new SchoolCafeteriaAdapter(getActivity(),SchoolCafeteria.getCafeterias());
-        rvSchoolCafeteria.setAdapter(adapter);
-
         //SchoolCafeteriaStudent
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("SchoolCafeteriaStudent").child("Menu");
@@ -84,6 +89,7 @@ public class SchoolCafeteriaFragment extends Fragment {
         });
 
         setSchoolCafeteriaProfessorMenus();
+        adapter.notifyDataSetChanged();
     }
 
     public void setSchoolCafeteriaProfessorMenus(){
