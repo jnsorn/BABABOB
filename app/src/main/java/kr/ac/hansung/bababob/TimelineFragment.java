@@ -28,6 +28,7 @@ public class TimelineFragment extends Fragment {
 
     public TimelineFragment() {
         // Required empty public constructor
+        //
     }
 
     public static TimelineFragment getInstance(){
