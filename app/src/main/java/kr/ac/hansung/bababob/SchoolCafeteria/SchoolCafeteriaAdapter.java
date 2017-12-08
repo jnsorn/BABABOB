@@ -30,6 +30,7 @@ public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteria
     public SchoolCafeteriaAdapter(Context context, List<SchoolCafeteria> cafeterias) {
         mContext = context;
         mCafeterias = cafeterias;
+        //
     }
 
     @Override
