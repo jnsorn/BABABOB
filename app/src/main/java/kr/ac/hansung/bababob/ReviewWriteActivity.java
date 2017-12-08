@@ -4,32 +4,30 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.google.firebase.database.*;
+import com.google.firebase.storage.*;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaStudentInfoActivity;
 
 public class ReviewWriteActivity extends AppCompatActivity {
 
@@ -37,16 +35,22 @@ public class ReviewWriteActivity extends AppCompatActivity {
     DatabaseReference myRef;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
+    //  public static MyHandler myHandler;
+    String str;
+    ArrayList cafeteriaStudentMenusNoodles, cafeteriaStudentMenusBab, cafeteriaStudentMenusFry;
 
     private Button add_photo_btn, pre_btn, upload_btn;
     private ImageView selected_iv;
     private RatingBar total_rat, spicy_rat, amount_rat;
     private EditText review_text;
+    private AutoCompleteTextView menu_tv;
+    private TextView textview;
     int GET_PICTURE_URI;
     float totalScore, spicyScore, amountScore;
     String time, restaurantName, imgURL;
     FirebaseUser user;
-    Bitmap bitmap=null;
+    Bitmap bitmap = null;
+    ArrayList<String> schoolCafeteriaStudentallMenus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,9 @@ public class ReviewWriteActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+        schoolCafeteriaStudentallMenus = new ArrayList<>();
+
+
         // matching view
         pre_btn = (Button) findViewById(R.id.pre_btn);
         add_photo_btn = (Button) findViewById(R.id.add_photo_btn);
@@ -67,7 +74,26 @@ public class ReviewWriteActivity extends AppCompatActivity {
         spicy_rat = (RatingBar) findViewById(R.id.spicy_rat);
         amount_rat = (RatingBar) findViewById(R.id.amount_rat);
         review_text = (EditText) findViewById(R.id.review_text);
+        menu_tv = (AutoCompleteTextView) findViewById(R.id.menu_tv);
+        textview = (TextView) findViewById(R.id.textview);
+        menu_tv.setVisibility(View.GONE);
+        textview.setVisibility(View.GONE);
 
+        if (restaurantName.equals("학생식당")) {
+            textview.setVisibility(View.VISIBLE);
+            menu_tv.setVisibility(View.VISIBLE);
+
+            for (int i = 0; i < SchoolCafeteriaStudentInfoActivity.cafeteriaStudentMenusNoodles.size(); i++) {
+                schoolCafeteriaStudentallMenus.add(SchoolCafeteriaStudentInfoActivity.cafeteriaStudentMenusNoodles.get(i).getMenu());
+            }
+            for (int i = 0; i < SchoolCafeteriaStudentInfoActivity.cafeteriaStudentMenusBab.size(); i++) {
+                schoolCafeteriaStudentallMenus.add(SchoolCafeteriaStudentInfoActivity.cafeteriaStudentMenusBab.get(i).getMenu());
+            }
+            for (int i = 0; i < SchoolCafeteriaStudentInfoActivity.cafeteriaStudentMenusFry.size(); i++) {
+                schoolCafeteriaStudentallMenus.add(SchoolCafeteriaStudentInfoActivity.cafeteriaStudentMenusFry.get(i).getMenu());
+            }
+        }
+        menu_tv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, schoolCafeteriaStudentallMenus));
 
         // [event] rating bar
         total_rat.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -119,11 +145,15 @@ public class ReviewWriteActivity extends AppCompatActivity {
                 Date date = new Date(now);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                 time = sdf.format(date);
-                putDataFirebase();
-                onBackPressed();
+                //넣기전에 확인을하는 함수가 있어야될거같어 그래서 그 제목도 못쓰면 안되게 처리 textㄴodydso내용ㅋㅋ
+                if(checkData()){
+                    putDataFirebase();
+                    onBackPressed();
+                }
 
             }
         });
+
 
     }
 
@@ -133,10 +163,11 @@ public class ReviewWriteActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     // 이미지를 만들어줌
-                    if(bitmap!=null){
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    selected_iv.setImageBitmap(bitmap);}
+                    if (bitmap != null) {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                        selected_iv.setImageBitmap(bitmap);
+                    }
                 } catch (Exception e) {
                     Log.e("test", e.getMessage());
                 }
@@ -148,7 +179,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-        StorageReference storageReference1 = storageReference.child("ReviewImg/"+postid+".jpg");
+        StorageReference storageReference1 = storageReference.child("ReviewImg/" + postid + ".jpg");
         UploadTask uploadTask = storageReference1.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -158,13 +189,8 @@ public class ReviewWriteActivity extends AppCompatActivity {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri downloadUrl  = taskSnapshot.getDownloadUrl();
-
-                myRef.child(postid).child("image").setValue(downloadUrl);
-                Log.i("######image",""+downloadUrl);
-                Log.i("######image",""+downloadUrl.getPath());
-                Log.i("######image",""+downloadUrl.getQuery());
-                Log.i("######image",""+downloadUrl.getLastPathSegment());
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                myRef.child(postid).child("image").setValue(downloadUrl.getPath());
             }
         });
     }
@@ -172,6 +198,8 @@ public class ReviewWriteActivity extends AppCompatActivity {
     private void putDataFirebase() {
         String postid = UUID.randomUUID().toString().replace("-", "");
         myRef = database.getReference("Review");
+
+
         myRef.child(postid).child("totalScore").setValue(totalScore);
         myRef.child(postid).child("spicyScore").setValue(spicyScore);
         myRef.child(postid).child("amountScore").setValue(amountScore);
@@ -179,7 +207,34 @@ public class ReviewWriteActivity extends AppCompatActivity {
         myRef.child(postid).child("time").setValue(time);
         myRef.child(postid).child("email").setValue(user.getEmail());
         myRef.child(postid).child("restaurant").setValue(restaurantName);
-        if(bitmap!=null)uploadFile(postid);
+
+        if (bitmap != null) uploadFile(postid);
+        else myRef.child(postid).child("image").setValue("null");
+        if (restaurantName.equals("학생식당")) {
+            if (menu_tv.getText().toString().equals("") || menu_tv.getText().toString().equals(null)) {
+                Toast.makeText(getApplicationContext(), "메뉴를 입력해주세요.", Toast.LENGTH_SHORT).show();
+
+            } else myRef.child(postid).child("menu").setValue(menu_tv.getText().toString());
+        } else myRef.child(postid).child("menu").setValue("null");
         Toast.makeText(getApplicationContext(), "리뷰가 등록되었습니다.", Toast.LENGTH_SHORT).show();
     }
+
+    private boolean checkData() {
+
+        if (restaurantName.equals("학생식당")) {
+            if (menu_tv.getText().toString().equals("") || menu_tv.getText().toString().equals(null)) {
+                Toast.makeText(getApplicationContext(), "메뉴를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        if(review_text.getText().toString().equals("")||review_text.getText().toString().equals(null)){
+            Toast.makeText(getApplicationContext(), "리뷰를 작성해주세요.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
 }
+
+

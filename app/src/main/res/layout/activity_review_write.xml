@@ -6,6 +6,7 @@
     android:orientation="vertical"
     tools:context="kr.ac.hansung.bababob.ReviewWriteActivity">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -45,6 +46,30 @@
             android:textColor="@android:color/white"
             android:textSize="20sp" />
     </RelativeLayout>
+    <!-- gone?? dzdz -->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="메뉴"/>
+        <AutoCompleteTextView
+            android:id="@+id/menu_tv"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:completionThreshold="2"
+            />
+
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
