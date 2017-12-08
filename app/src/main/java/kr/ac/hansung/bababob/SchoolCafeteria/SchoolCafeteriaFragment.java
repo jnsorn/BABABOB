@@ -56,12 +56,11 @@ public class SchoolCafeteriaFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("jina","frag onCreateView");
         View view = inflater.inflate(R.layout.fragment_school_cafeteria, container, false);
         rvSchoolCafeteria = (RecyclerView) view.findViewById(R.id.school_cafeteria_recycler_view);
-        adapter = new SchoolCafeteriaAdapter(getActivity(),SchoolCafeteria.getCafeterias());
+        adapter = new SchoolCafeteriaAdapter(getActivity(), SchoolCafeteria.getCafeterias());
         rvSchoolCafeteria.setAdapter(adapter);
         return view;
     }
@@ -71,7 +70,8 @@ public class SchoolCafeteriaFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //SchoolCafeteriaStudent
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("SchoolCafeteriaStudent").child("Menu");
+        DatabaseReference ref = database.getReference("SchoolCafeteriaStudent").child("RollNoodles");
+        schoolCafeteriaStudentMenus.add(new SchoolCafeteriaMenu("면류&찌개&김밥",0));
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,6 +87,12 @@ public class SchoolCafeteriaFragment extends Fragment {
 
             }
         });
+
+//        DatabaseReference ref2 = database.getReference("SchoolCafeteriaStudent").child("Bab");
+//        schoolCafeteriaStudentMenus.add(new SchoolCafeteriaMenu("덮밥류&비빔밥",0));
+//
+//        DatabaseReference ref3 = database.getReference("SchoolCafeteriaStudent").child("FryRice");
+//        schoolCafeteriaStudentMenus.add(new SchoolCafeteriaMenu("볶음밥&오므라이스&돈까스",0));
 
         setSchoolCafeteriaProfessorMenus();
         adapter.notifyDataSetChanged();
@@ -111,7 +117,7 @@ public class SchoolCafeteriaFragment extends Fragment {
                             tmp += string + " / ";
                         }
                         schoolCafeteriaProfessorMenus[i] = new SchoolCafeteriaProfessorMenu();
-                        schoolCafeteriaProfessorMenus[i].setLunch(new SchoolCafeteriaMenu(tmp, 4500));
+                        schoolCafeteriaProfessorMenus[i].setLunch(new SchoolCafeteriaMenu(tmp, 0));
                     }
 
                     for(int i=0; i<5; i++) {
@@ -122,7 +128,7 @@ public class SchoolCafeteriaFragment extends Fragment {
                             if(!string.equals(""))
                                 tmp += string + " / ";
                         }
-                        schoolCafeteriaProfessorMenus[i].setDinner(new SchoolCafeteriaMenu(tmp, 4500));
+                        schoolCafeteriaProfessorMenus[i].setDinner(new SchoolCafeteriaMenu(tmp, 0));
                     }
 
                 } catch (IOException e) {

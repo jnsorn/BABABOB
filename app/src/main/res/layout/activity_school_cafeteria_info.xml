@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaInfoActivity">
+    tools:context="kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaStudentInfoActivity">
 
     <TextView
         android:id="@+id/cafeteria_name"
@@ -16,5 +16,17 @@
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
         android:textAlignment="center"
+        android:textColor="@android:color/black"
         android:textSize="25sp" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/cafeteria_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/cafeteria_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
 </LinearLayout>

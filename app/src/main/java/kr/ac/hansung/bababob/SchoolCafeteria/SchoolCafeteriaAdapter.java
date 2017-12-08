@@ -47,6 +47,8 @@ public class SchoolCafeteriaAdapter extends RecyclerView.Adapter<SchoolCafeteria
         textView1.setText(cafeteria.getCafeteria());
         TextView textView2 = holder.cafeteriaTimeTextView;
         textView2.setText(cafeteria.getTime());
+
+
     }
 
     @Override

@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 public class ReviewWriteActivity extends AppCompatActivity {
 
-    private Button add_photo_btn;
+    private Button add_photo_btn, pre_btn;
     private ImageView selected_iv;
     int GET_PICTURE_URI;
     @Override
@@ -21,8 +21,16 @@ public class ReviewWriteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_write);
 
+        pre_btn =(Button)findViewById(R.id.pre_btn);
         add_photo_btn = (Button)findViewById(R.id.add_photo_btn);
         selected_iv = (ImageView)findViewById(R.id.selected_iv);
+
+        pre_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         add_photo_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,6 +40,8 @@ public class ReviewWriteActivity extends AppCompatActivity {
                 startActivityForResult(intent, GET_PICTURE_URI);
             }
         });
+
+
     }
 
     @Override

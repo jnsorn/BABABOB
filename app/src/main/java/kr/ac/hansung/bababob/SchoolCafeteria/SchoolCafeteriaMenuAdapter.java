@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 
 import kr.ac.hansung.bababob.R;
@@ -49,7 +50,15 @@ public class SchoolCafeteriaMenuAdapter extends RecyclerView.Adapter<SchoolCafet
         return mMenus.size();
     }
 
-
+    public void changeData(int date)
+    {
+        mMenus.clear();
+        mMenus.add(new SchoolCafeteriaMenu("중식", 0));
+        mMenus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[date-2].getLunch());
+        mMenus.add(new SchoolCafeteriaMenu("석식", 0));
+        mMenus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[date-2].getDinner());
+        notifyDataSetChanged();
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

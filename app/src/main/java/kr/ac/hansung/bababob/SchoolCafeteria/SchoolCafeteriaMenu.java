@@ -36,12 +36,12 @@ public class SchoolCafeteriaMenu {
     public String getPrice(){
         return Integer.toString(price);
     }
+
     public static ArrayList<SchoolCafeteriaMenu> getMenus(int num){
         ArrayList<SchoolCafeteriaMenu> menus = new ArrayList<SchoolCafeteriaMenu>();
         switch (num) {
             case SchoolCafeteria.PROFESSOR_CAFETERIA: {
                 menus.add(new SchoolCafeteriaMenu("중식", 0));
-
                 menus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2].getLunch());
                 menus.add(new SchoolCafeteriaMenu("석식", 0));
                 menus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-2].getDinner());
@@ -49,9 +49,6 @@ public class SchoolCafeteriaMenu {
             }
             case SchoolCafeteria.STUDENT_CAFETERIA: {
                 return SchoolCafeteriaFragment.schoolCafeteriaStudentMenus;
-            }
-            case SchoolCafeteria.MILGAOK: {
-                break;
             }
         }
         return menus;

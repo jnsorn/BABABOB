@@ -54,7 +54,6 @@ public class RestaurantInfoActivity extends AppCompatActivity  {
                 }
 
             }
-//
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

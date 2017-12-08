@@ -9,11 +9,9 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -22,7 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import kr.ac.hansung.bababob.Restaurant.RestaurantInfoActivity;
-import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaInfoActivity;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteria;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaStudentInfoActivity;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaProfessorInfoActivity;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -87,9 +87,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if(id==R.id.edit_profile){
+        if(id==R.id.my_review){
 
-        }else if(id == R.id.logout){
+        }else if(id == R.id.setting){
+
+        } else if(id == R.id.logout){
             FirebaseAuth.getInstance().signOut();
             Intent itent = new Intent(MainActivity.this, ConnectionActivity.class);
             finish();
@@ -112,7 +114,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                  startActivity(intent);
              }
              else if(activity.equals("SchoolCafeteriaInfoActivity")){
-                 Intent intent = new Intent(getApplicationContext(), SchoolCafeteriaInfoActivity.class);
+                 int cafeteriaName = bundle.getInt("CafeteriaName");
+                 Intent intent = null;
+                 switch (cafeteriaName){
+                     case SchoolCafeteria.PROFESSOR_CAFETERIA :
+                         intent = new Intent(getApplicationContext(), SchoolCafeteriaProfessorInfoActivity.class);
+                         break;
+                     case SchoolCafeteria.STUDENT_CAFETERIA:
+                         intent = new Intent(getApplicationContext(), SchoolCafeteriaStudentInfoActivity.class);
+                         break;
+                 }
                  intent.putExtra("CafeteriaName", bundle.getInt("CafeteriaName"));
                  startActivity(intent);
              }
