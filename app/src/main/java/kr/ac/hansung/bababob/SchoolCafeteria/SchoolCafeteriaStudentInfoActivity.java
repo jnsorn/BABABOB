@@ -6,7 +6,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +30,7 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
 
-        setContentView(R.layout.activity_school_cafeteria_info);
+        setContentView(R.layout.activity_school_cafeteria_student_info);
         Intent intent = getIntent();
         int cafeteriaName = intent.getIntExtra("CafeteriaName",SchoolCafeteria.STUDENT_CAFETERIA);
 

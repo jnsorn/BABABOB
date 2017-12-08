@@ -159,7 +159,12 @@ public class ReviewWriteActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Uri downloadUrl  = taskSnapshot.getDownloadUrl();
-                myRef.child(postid).child("image").setValue(downloadUrl.getPath());
+
+                myRef.child(postid).child("image").setValue(downloadUrl);
+                Log.i("######image",""+downloadUrl);
+                Log.i("######image",""+downloadUrl.getPath());
+                Log.i("######image",""+downloadUrl.getQuery());
+                Log.i("######image",""+downloadUrl.getLastPathSegment());
             }
         });
     }

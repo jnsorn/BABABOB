@@ -18,11 +18,11 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return RestaurantFragment.getInstance();
+                return TimelineFragment.getInstance();
             case 1:
                 return SchoolCafeteriaFragment.getInstance();
             case 2:
-                return ChattingFragment.getInstance();
+                return RestaurantFragment.getInstance();
             default:
                 return null;
         }
@@ -31,11 +31,11 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public String getPageTitle(int position){
         switch (position) {
             case 0:
-                return "Restaurant";
+                return "TimeLine";
             case 1:
                 return "School Cafeteria";
             case 2:
-                return "Chatting";
+                return "Restaurant";
             default:
                 return null;
         }
@@ -44,11 +44,11 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public int getIcon(int position){
         switch (position) {
             case 0:
-                return R.drawable.restaurant;
+                return R.drawable.menu;
             case 1:
                 return R.drawable.shop;
             case 2:
-                return R.drawable.chat;
+                return R.drawable.restaurant;
             default:
                 return 0;
         }
