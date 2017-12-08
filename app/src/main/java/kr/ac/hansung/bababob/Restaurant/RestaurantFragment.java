@@ -25,10 +25,6 @@ import kr.ac.hansung.bababob.R;
 
 import static java.security.AccessController.getContext;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class RestaurantFragment extends Fragment {
 
 

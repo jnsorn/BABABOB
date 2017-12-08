@@ -46,6 +46,7 @@ public class ConnectionActivity extends AppCompatActivity implements View.OnClic
     private TextView mTextSignIn;
     private TextWatcher textWatcherUp;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

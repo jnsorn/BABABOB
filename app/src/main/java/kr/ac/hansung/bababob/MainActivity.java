@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public class MyHandler extends Handler{
+     public class MyHandler extends Handler{
          @Override
          public void handleMessage(Message msg) {
              super.handleMessage(msg);
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
              }
              else if(activity.equals("ReviewWriteActivity")){
                  Intent intent = new Intent(getApplicationContext(), ReviewWriteActivity.class);
+                 intent.putExtra("RestaurantName", bundle.getString("RestaurantName"));
                  startActivity(intent);
              }
          }
