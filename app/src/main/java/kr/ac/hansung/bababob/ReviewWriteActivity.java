@@ -46,7 +46,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
     float totalScore, spicyScore, amountScore;
     String time, restaurantName, imgURL;
     FirebaseUser user;
-    Bitmap bitmap;
+    Bitmap bitmap=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +133,10 @@ public class ReviewWriteActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     // 이미지를 만들어줌
+                    if(bitmap!=null){
                     bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                    selected_iv.setImageBitmap(bitmap);
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                    selected_iv.setImageBitmap(bitmap);}
                 } catch (Exception e) {
                     Log.e("test", e.getMessage());
                 }
@@ -156,7 +158,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Uri downloadUrl  = taskSnapshot.getDownloadUrl();
                 myRef.child(postid).child("image").setValue(downloadUrl.getPath());
             }
         });
@@ -172,7 +174,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
         myRef.child(postid).child("time").setValue(time);
         myRef.child(postid).child("email").setValue(user.getEmail());
         myRef.child(postid).child("restaurant").setValue(restaurantName);
-        uploadFile(postid);
+        if(bitmap!=null)uploadFile(postid);
         Toast.makeText(getApplicationContext(), "리뷰가 등록되었습니다.", Toast.LENGTH_SHORT).show();
     }
 }
