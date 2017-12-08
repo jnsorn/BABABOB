@@ -1,22 +1,13 @@
 package kr.ac.hansung.bababob.SchoolCafeteria;
-
 import android.content.Intent;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.*;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
+import com.google.firebase.database.*;
 import java.util.ArrayList;
-
 import kr.ac.hansung.bababob.R;
 
 public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
@@ -24,7 +15,7 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
     public static ArrayList<SchoolCafeteriaMenu> cafeteriaStudentMenusNoodles = new ArrayList<SchoolCafeteriaMenu>();
     public static ArrayList<SchoolCafeteriaMenu> cafeteriaStudentMenusBab = new ArrayList<SchoolCafeteriaMenu>();
     public static ArrayList<SchoolCafeteriaMenu> cafeteriaStudentMenusFry = new ArrayList<SchoolCafeteriaMenu>();
-
+    Message message;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +42,7 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
     public void getDataFromFirebase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("SchoolCafeteriaStudent").child("RollNoodles");
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -76,6 +68,7 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
                     SchoolCafeteriaMenu schoolCafeteriaMenu = messageSnapshot.getValue(SchoolCafeteriaMenu.class);
                     cafeteriaStudentMenusBab.add(schoolCafeteriaMenu);
                 }
+
             }
 
             @Override
@@ -93,6 +86,7 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
                     SchoolCafeteriaMenu schoolCafeteriaMenu = messageSnapshot.getValue(SchoolCafeteriaMenu.class);
                     cafeteriaStudentMenusFry.add(schoolCafeteriaMenu);
                 }
+
             }
 
             @Override
@@ -101,4 +95,5 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
             }
         });
     }
+
 }
