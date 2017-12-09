@@ -37,13 +37,12 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.ViewHol
         mCommentReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                mComments.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Comment comment = snapshot.getValue(Comment.class);
                     mComments.add(comment);
                     notifyItemChanged(mComments.size()-1);
                 }
-                //Log.e("jina","Comment"+Integer.toString(mComments.size())+mComments.get(0).getEmail());
             }
 
             @Override
@@ -64,6 +63,9 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Comment comment = mComments.get(position);
+        Log.e("jina","Commentema"+comment.getEmail());
+        Log.e("jina","Commenttext"+comment.getText());
+
         holder.emailTextView.setText(comment.getEmail());
         holder.textTextView.setText(comment.getText());
     }

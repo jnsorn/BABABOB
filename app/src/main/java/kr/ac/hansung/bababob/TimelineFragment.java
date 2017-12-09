@@ -50,7 +50,7 @@ public class TimelineFragment extends Fragment {
         adapter = new TimelineAdapter(getActivity(), mPostReference);
         rvReview.setAdapter(adapter);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-        itemAnimator.setAddDuration(1000);
+        itemAnimator.setAddDuration(500);
         rvReview.setItemAnimator(itemAnimator);
         return view;
     }
