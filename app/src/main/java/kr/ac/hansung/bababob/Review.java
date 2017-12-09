@@ -6,6 +6,7 @@ package kr.ac.hansung.bababob;
 
 public class Review {
 
+    private String id;
     private String email;
     private String restaurant;
     private String menu;
@@ -20,8 +21,8 @@ public class Review {
 
     }
 
-    public Review(String email, String restaurant, String time, String image, String text, float amountScore, float spicyScore, float totalScore) {
-
+    public Review(String id, String email, String restaurant, String time, String image, String text, float amountScore, float spicyScore, float totalScore) {
+        this.id = id;
         this.email = email;
         this.restaurant = restaurant;
         this.time = time;
@@ -32,6 +33,13 @@ public class Review {
         this.totalScore = totalScore;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;

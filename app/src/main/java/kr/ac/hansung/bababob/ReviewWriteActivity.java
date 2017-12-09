@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -35,9 +33,6 @@ public class ReviewWriteActivity extends AppCompatActivity {
     DatabaseReference myRef;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
-    //  public static MyHandler myHandler;
-    String str;
-    ArrayList cafeteriaStudentMenusNoodles, cafeteriaStudentMenusBab, cafeteriaStudentMenusFry;
 
     private Button add_photo_btn, pre_btn, upload_btn;
     private ImageView selected_iv;
@@ -46,7 +41,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
     private AutoCompleteTextView menu_tv;
     private TextView textview;
     int GET_PICTURE_URI;
-    float totalScore, spicyScore, amountScore;
+    int totalScore, spicyScore, amountScore;
     String time, restaurantName, imgURL;
     FirebaseUser user;
     Bitmap bitmap = null;
@@ -100,7 +95,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 Log.i("######## total_rat:", "" + v);
-                totalScore = v;
+                totalScore = (int)v;
             }
         });
 
@@ -108,7 +103,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 Log.i("######## spicy_rat:", "" + v);
-                spicyScore = v;
+                spicyScore = (int)v;
             }
         });
 
@@ -116,7 +111,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 Log.i("######## amount_rat:", "" + v);
-                amountScore = v;
+                amountScore = (int)v;
             }
         });
 

@@ -15,11 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,15 +35,16 @@ import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaMenu;
  * Created by Jina on 2017-12-09.
  */
 
-public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder>{
+public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
 
     private Context mContext;
     private DatabaseReference mPostReference;
+    private DatabaseReference mLikeReference;
+    private FirebaseUser user;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     private List<String> mReviewIds = new ArrayList<String>();
     private List<Review> mReviews = new ArrayList<Review>();
-    private FirebaseUser user;
 
     public TimelineAdapter(Context context, DatabaseReference postReference) {
         mContext = context;
@@ -64,7 +62,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
 
                     notifyItemChanged(mReviews.size()-1);
                 }
-                //Log.e("jina",Integer.toString(mReviews.size()));
+                Log.e("jina",Integer.toString(mReviews.size()));
             }
 
             @Override
@@ -83,13 +81,30 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         Review review = mReviews.get(position);
         holder.emailTextView.setText(review.getEmail());
         holder.textTextView.setText(review.getText());
         Glide.with(mContext).load(review.getImage()).into(holder.image);
         CommentAdapter adapter = new CommentAdapter(mContext, mReviewIds.get(position));
         holder.rvComment.setAdapter(adapter);
+
+        mLikeReference = database.getReference("Likes").child(user.getUid()).child(mReviewIds.get(position));
+        mLikeReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                    holder.likeBtn.setImageResource(R.drawable.heartfilled);
+                else
+                    holder.likeBtn.setImageResource(R.drawable.heart);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override
@@ -112,6 +127,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         private boolean isCommentEditTextOpen=false;
 
         private DatabaseReference commentReference;
+
+        private DatabaseReference likeReference;
+        private Boolean isClicked = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -153,24 +171,41 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         @Override
         public void onClick(View view) {
             int id = view.getId();
-            switch (id){
+            switch (id) {
                 case R.id.comment_btn:
-                    if(!isCommentEditTextOpen){
+                    if (!isCommentEditTextOpen) {
                         commentLayout.setVisibility(View.VISIBLE);
                         isCommentEditTextOpen = true;
-                    }else if(isCommentEditTextOpen){
+                    } else if (isCommentEditTextOpen) {
                         commentEditText.setText("");
                         commentLayout.setVisibility(View.GONE);
                         isCommentEditTextOpen = false;
                     }
                     break;
                 case R.id.like_btn:
-
+                    postLike();
                     break;
                 case R.id.comment_post_btn:
                     postComment();
                     commentEditText.setText("");
                     break;
+            }
+        }
+
+        public void postLike(){
+            likeReference = database.getReference("Likes").child(user.getUid()).child(mReviewIds.get(getAdapterPosition()));
+            if (!isClicked) {
+                //만약 좋아요를 누르지 않은 상태라면
+                //데이터베이스에 추가 후 이미지를 변경한다.
+                likeReference.setValue(mReviewIds.get(getAdapterPosition()));
+                likeBtn.setImageResource(R.drawable.heartfilled);
+                isClicked = true;
+            } else {
+                //만약 좋아요를 누른 상태라면
+                //데이터베이스 삭제 후 이미지를 변경한다.
+                likeReference.removeValue();
+                likeBtn.setImageResource(R.drawable.heart);
+                isClicked = false;
             }
         }
 
