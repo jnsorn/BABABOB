@@ -33,7 +33,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     private Context mContext;
     private DatabaseReference mPostReference;
 
-    private List<Review> mReviews = new ArrayList<>();
+    private List<String> mReviewIds = new ArrayList<String>();
+    private List<Review> mReviews = new ArrayList<Review>();
 
     public TimelineAdapter(Context context, DatabaseReference postReference) {
         mContext = context;
@@ -45,6 +46,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Review review = snapshot.getValue(Review.class);
+                    mReviewIds.add(snapshot.getKey());
                     mReviews.add(review);
 
                     notifyItemChanged(mReviews.size()-1);
@@ -73,6 +75,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         holder.emailTextView.setText(review.getEmail());
         holder.textTextView.setText(review.getText());
         Glide.with(mContext).load(review.getImage()).into(holder.image);
+        CommentAdapter adapter = new CommentAdapter(mContext, mReviewIds.get(position));
+        holder.rvComment.setAdapter(adapter);
     }
 
     @Override
@@ -87,6 +91,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         private TextView textTextView;
         private ImageButton commentBtn;
         private ImageButton likeBtn;
+        private RecyclerView rvComment;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -95,17 +100,23 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
             textTextView = (TextView) itemView.findViewById(R.id.review_text);
             commentBtn = (ImageButton) itemView.findViewById(R.id.comment_btn);
             likeBtn = (ImageButton) itemView.findViewById(R.id.like_btn);
-
+            rvComment = (RecyclerView) itemView.findViewById(R.id.comment_recycler_view);
             commentBtn.setOnClickListener(this);
             likeBtn.setOnClickListener(this);
+
+
         }
 
         @Override
         public void onClick(View view) {
             int id = view.getId();
             switch (id){
-                case R.id.comment_btn: break;
-                case R.id.like_btn: break;
+                case R.id.comment_btn:
+
+                    break;
+                case R.id.like_btn:
+
+                    break;
             }
         }
 
