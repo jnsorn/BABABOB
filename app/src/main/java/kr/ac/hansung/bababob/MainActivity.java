@@ -19,8 +19,17 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+
 import kr.ac.hansung.bababob.Restaurant.RestaurantInfoActivity;
 import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteria;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaMenu;
+import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaProfessorMenu;
 import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaStudentInfoActivity;
 import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaProfessorInfoActivity;
 
@@ -29,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static MyHandler myHandler;
     private FirebaseAuth mAuth;
     private DrawerLayout drawer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if(id==R.id.my_review){
-
+            Intent itent = new Intent(MainActivity.this, MyReviewActivity.class);
+            startActivity(itent);
         }else if(id == R.id.setting){
 
         } else if(id == R.id.logout){
@@ -97,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             finish();
             startActivity(itent);
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 
      public class MyHandler extends Handler{

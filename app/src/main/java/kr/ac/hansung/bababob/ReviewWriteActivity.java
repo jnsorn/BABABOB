@@ -29,7 +29,7 @@ import kr.ac.hansung.bababob.SchoolCafeteria.SchoolCafeteriaStudentInfoActivity;
 
 public class ReviewWriteActivity extends AppCompatActivity {
 
-    FirebaseDatabase database;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
     StorageReference storageReference;
     FirebaseStorage firebaseStorage;
@@ -53,12 +53,13 @@ public class ReviewWriteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review_write);
         Intent intent = getIntent();
         restaurantName = intent.getStringExtra("RestaurantName");
-        database = FirebaseDatabase.getInstance();
+
+        myRef = database.getReference("Review");
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
         schoolCafeteriaStudentallMenus = new ArrayList<>();
-
 
         // matching view
         pre_btn = (Button) findViewById(R.id.pre_btn);
@@ -95,7 +96,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 Log.i("######## total_rat:", "" + v);
-                totalScore = (int)v;
+                totalScore = (int) v;
             }
         });
 
@@ -103,7 +104,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 Log.i("######## spicy_rat:", "" + v);
-                spicyScore = (int)v;
+                spicyScore = (int) v;
             }
         });
 
@@ -111,7 +112,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 Log.i("######## amount_rat:", "" + v);
-                amountScore = (int)v;
+                amountScore = (int) v;
             }
         });
 
@@ -140,11 +141,13 @@ public class ReviewWriteActivity extends AppCompatActivity {
                 Date date = new Date(now);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                 time = sdf.format(date);
-                //넣기전에 확인을하는 함수가 있어야될거같어 그래서 그 제목도 못쓰면 안되게 처리 textㄴodydso내용ㅋㅋ
-                if(checkData()){
-                    putDataFirebase();
-                    onBackPressed();
+                if (checkData()) {
+                    String postid = UUID.randomUUID().toString().replace("-", "");
+                    uploadFile(postid);
                 }
+                Toast.makeText(getApplicationContext(), "리뷰가 등록되었습니다.", Toast.LENGTH_SHORT).show();
+                onBackPressed();
+
 
             }
         });
@@ -158,11 +161,9 @@ public class ReviewWriteActivity extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     // 이미지를 만들어줌
-                    if (bitmap != null) {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                        selected_iv.setImageBitmap(bitmap);
-                    }
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                    Log.i("###bitmap", bitmap.toString());
+                    selected_iv.setImageBitmap(bitmap);
                 } catch (Exception e) {
                     Log.e("test", e.getMessage());
                 }
@@ -170,31 +171,30 @@ public class ReviewWriteActivity extends AppCompatActivity {
         }
     }
 
+    Uri downloadUrl;
+
     private void uploadFile(final String postid) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        if (bitmap != null) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);}
         byte[] data = baos.toByteArray();
-        StorageReference storageReference1 = storageReference.child("ReviewImg/" + postid + ".jpg");
+        final StorageReference storageReference1 = storageReference.child("ReviewImg/" + postid + ".jpg");
         UploadTask uploadTask = storageReference1.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                myRef.child(postid).child("image").setValue(downloadUrl.getPath());
+                downloadUrl = taskSnapshot.getDownloadUrl();
+                putDataFirebase(postid, downloadUrl);
             }
         });
+
     }
 
-    private void putDataFirebase() {
-        String postid = UUID.randomUUID().toString().replace("-", "");
-        myRef = database.getReference("Review");
-
-
+    public void putDataFirebase(String postid, Uri downloadUrl) {
         myRef.child(postid).child("totalScore").setValue(totalScore);
         myRef.child(postid).child("spicyScore").setValue(spicyScore);
         myRef.child(postid).child("amountScore").setValue(amountScore);
@@ -202,16 +202,15 @@ public class ReviewWriteActivity extends AppCompatActivity {
         myRef.child(postid).child("time").setValue(time);
         myRef.child(postid).child("email").setValue(user.getEmail());
         myRef.child(postid).child("restaurant").setValue(restaurantName);
+        myRef.child(postid).child("image").setValue("" + downloadUrl);
 
-        if (bitmap != null) uploadFile(postid);
-        else myRef.child(postid).child("image").setValue("null");
         if (restaurantName.equals("학생식당")) {
             if (menu_tv.getText().toString().equals("") || menu_tv.getText().toString().equals(null)) {
                 Toast.makeText(getApplicationContext(), "메뉴를 입력해주세요.", Toast.LENGTH_SHORT).show();
 
             } else myRef.child(postid).child("menu").setValue(menu_tv.getText().toString());
         } else myRef.child(postid).child("menu").setValue("null");
-        Toast.makeText(getApplicationContext(), "리뷰가 등록되었습니다.", Toast.LENGTH_SHORT).show();
+
     }
 
     private boolean checkData() {
@@ -223,7 +222,7 @@ public class ReviewWriteActivity extends AppCompatActivity {
             }
         }
 
-        if(review_text.getText().toString().equals("")||review_text.getText().toString().equals(null)){
+        if (review_text.getText().toString().equals("") || review_text.getText().toString().equals(null)) {
             Toast.makeText(getApplicationContext(), "리뷰를 작성해주세요.", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -231,5 +230,3 @@ public class ReviewWriteActivity extends AppCompatActivity {
         return true;
     }
 }
-
-

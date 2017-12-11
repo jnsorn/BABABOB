@@ -26,7 +26,6 @@ public class TimelineFragment extends Fragment {
 
     private static TimelineFragment instance;
     private DatabaseReference mPostReference;
-    private DatabaseReference mCommentReference;
     private RecyclerView rvReview;
     private TimelineAdapter adapter;
     private FirebaseAuth mAuth;
@@ -58,7 +57,7 @@ public class TimelineFragment extends Fragment {
         //mCommentReference = FirebaseDatabase.getInstance().getReference("Comments");
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
         rvReview = (RecyclerView) view.findViewById(R.id.timeline_recycler_view);
-        adapter = new TimelineAdapter(getActivity(), mPostReference);
+        adapter = new TimelineAdapter(getActivity(), "");
         rvReview.setAdapter(adapter);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         itemAnimator.setAddDuration(500);

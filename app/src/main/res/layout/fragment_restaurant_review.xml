@@ -1,23 +1,26 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="kr.ac.hansung.bababob.Restaurant.RestaurantReviewFragment">
 
-    <ScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/restaurant_review_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/write_btn"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager">
 
-    </ScrollView>
+    </android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/write_btn"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:text="리뷰쓰기"
         android:textColor="@android:color/white" />
-</FrameLayout>
+</RelativeLayout>

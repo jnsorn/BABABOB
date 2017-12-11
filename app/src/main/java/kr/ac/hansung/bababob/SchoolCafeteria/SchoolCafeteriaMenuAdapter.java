@@ -22,9 +22,9 @@ public class SchoolCafeteriaMenuAdapter extends RecyclerView.Adapter<SchoolCafet
     private Context mContext;
     private List<SchoolCafeteriaMenu> mMenus;
 
-    public SchoolCafeteriaMenuAdapter(Context context, List<SchoolCafeteriaMenu> menus) {
+    public SchoolCafeteriaMenuAdapter(Context context,List<SchoolCafeteriaMenu> menus) {
         mContext = context;
-        mMenus= menus;
+        mMenus = menus;
     }
 
     @Override
@@ -54,9 +54,9 @@ public class SchoolCafeteriaMenuAdapter extends RecyclerView.Adapter<SchoolCafet
     {
         mMenus.clear();
         mMenus.add(new SchoolCafeteriaMenu("중식", 0));
-        mMenus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[date-2].getLunch());
+        mMenus.add(SchoolCafeteriaAdapter.schoolCafeteriaProfessorMenus[date-2].getLunch());
         mMenus.add(new SchoolCafeteriaMenu("석식", 0));
-        mMenus.add(SchoolCafeteriaFragment.schoolCafeteriaProfessorMenus[date-2].getDinner());
+        mMenus.add(SchoolCafeteriaAdapter.schoolCafeteriaProfessorMenus[date-2].getDinner());
         notifyDataSetChanged();
     }
 

@@ -11,6 +11,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,7 +56,7 @@ public class SchoolCafeteriaProfessorInfoActivity extends AppCompatActivity impl
         mTextDate.setText(dateFormat.format(calendar.getTime()));
 
         rvSchoolCafeteriaProfessor = (RecyclerView) findViewById(R.id.school_cafeteria_professor_recycler_view);
-        adapter = new SchoolCafeteriaMenuAdapter(this,SchoolCafeteriaMenu.getMenus(SchoolCafeteria.PROFESSOR_CAFETERIA));
+        adapter = new SchoolCafeteriaMenuAdapter(this, SchoolCafeteriaMenu.getMenus(SchoolCafeteria.PROFESSOR_CAFETERIA));
         rvSchoolCafeteriaProfessor.setAdapter(adapter);
     }
 

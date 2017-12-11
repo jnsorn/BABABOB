@@ -23,8 +23,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -43,33 +47,51 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     private FirebaseUser user;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    private List<String> mReviewIds = new ArrayList<String>();
     private List<Review> mReviews = new ArrayList<Review>();
 
-    public TimelineAdapter(Context context, DatabaseReference postReference) {
+    public TimelineAdapter(Context context, final String restaurant) {
         mContext = context;
-        mPostReference = postReference;
+        mPostReference = database.getReference("Review");
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mPostReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        ValueEventListener valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mReviews.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Review review = snapshot.getValue(Review.class);
-                    mReviewIds.add(snapshot.getKey());
-                    mReviews.add(review);
+                        Review review = snapshot.getValue(Review.class);
+                        if (review.getRestaurant()!=null && review.getRestaurant().equals(restaurant)) {
+                            review.setId(snapshot.getKey());
+                            mReviews.add(review);
+                        } else if (restaurant.equals("")) {
+                            review.setId(snapshot.getKey());
+                            mReviews.add(review);
+                        } else if (review.getEmail() != null && restaurant.equals("내리뷰") && review.getEmail().equals(user.getEmail())) {
+                            review.setId(snapshot.getKey());
+                            mReviews.add(review);
+                        }
 
-                    notifyItemChanged(mReviews.size()-1);
+                        Collections.sort(mReviews, new Comparator<Review>() {
+                            @Override
+                            public int compare(Review o1, Review o2) {
+                                if(o2.getTime() != null && o1.getTime() != null)
+                                    return o2.getTime().compareTo(o1.getTime());
+                                else
+                                    return 0;
+                            }
+                        });
+                        notifyItemChanged(mReviews.size() - 1);
+                    }
                 }
-                Log.e("jina",Integer.toString(mReviews.size()));
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            };
+        mPostReference.addValueEventListener(valueEventListener);
+
     }
 
     @Override
@@ -84,12 +106,19 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Review review = mReviews.get(position);
         holder.emailTextView.setText(review.getEmail());
+        holder.timeTextView.setText(review.getTime());
+        holder.restaurantTextView.setText(review.getRestaurant());
+        holder.menuTextView.setText(review.getMenu());
+        holder.amountScoreTextView.setText(Float.toString(review.getAmountScore()));
+        holder.spicyScoreTextView.setText(Float.toString(review.getSpicyScore()));
+        holder.totalScoreTextView.setText(Float.toString(review.getTotalScore()));
         holder.textTextView.setText(review.getText());
-        Glide.with(mContext).load(review.getImage()).into(holder.image);
-        CommentAdapter adapter = new CommentAdapter(mContext, mReviewIds.get(position));
+        if(review.getImage()!=null)
+            Glide.with(mContext).load(review.getImage()).into(holder.image);
+        CommentAdapter adapter = new CommentAdapter(mContext, mReviews.get(position).getId());
         holder.rvComment.setAdapter(adapter);
 
-        mLikeReference = database.getReference("Likes").child(user.getUid()).child(mReviewIds.get(position));
+        mLikeReference = database.getReference("Likes").child(user.getUid()).child(mReviews.get(position).getId());
         mLikeReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,6 +144,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView emailTextView;
+        private TextView timeTextView;
+        private TextView restaurantTextView;
+        private TextView menuTextView;
+        private TextView amountScoreTextView;
+        private TextView spicyScoreTextView;
+        private TextView totalScoreTextView;
         private ImageView image;
         private TextView textTextView;
         private ImageButton commentBtn;
@@ -134,6 +169,13 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             emailTextView = (TextView) itemView.findViewById(R.id.review_email);
+            timeTextView = (TextView) itemView.findViewById(R.id.review_time);
+            restaurantTextView = (TextView) itemView.findViewById(R.id.review_restaurant);
+            menuTextView = (TextView) itemView.findViewById(R.id.review_menu);
+            amountScoreTextView = (TextView) itemView.findViewById(R.id.review_amount_score);
+            spicyScoreTextView = (TextView) itemView.findViewById(R.id.review_spicy_score);
+            totalScoreTextView = (TextView) itemView.findViewById(R.id.review_total_score);
+
             image = (ImageView) itemView.findViewById(R.id.review_image);
             textTextView = (TextView) itemView.findViewById(R.id.review_text);
             commentBtn = (ImageButton) itemView.findViewById(R.id.comment_btn);
@@ -193,25 +235,23 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         }
 
         public void postLike(){
-            likeReference = database.getReference("Likes").child(user.getUid()).child(mReviewIds.get(getAdapterPosition()));
+            likeReference = database.getReference("Likes").child(user.getUid()).child(mReviews.get(getAdapterPosition()).getId());
             if (!isClicked) {
                 //만약 좋아요를 누르지 않은 상태라면
                 //데이터베이스에 추가 후 이미지를 변경한다.
-                likeReference.setValue(mReviewIds.get(getAdapterPosition()));
-                likeBtn.setImageResource(R.drawable.heartfilled);
+                likeReference.setValue(mReviews.get(getAdapterPosition()).getId());
                 isClicked = true;
             } else {
                 //만약 좋아요를 누른 상태라면
                 //데이터베이스 삭제 후 이미지를 변경한다.
                 likeReference.removeValue();
-                likeBtn.setImageResource(R.drawable.heart);
                 isClicked = false;
             }
         }
 
 
         private void postComment() {
-            commentReference = database.getReference().child("Comments").child(mReviewIds.get(getAdapterPosition())).child(UUID.randomUUID().toString().replace("-",""));
+            commentReference = database.getReference().child("Comments").child(mReviews.get(getAdapterPosition()).getId()).child(UUID.randomUUID().toString().replace("-",""));
             Comment comment = new Comment(user.getEmail(), commentEditText.getText().toString(), getTime());
             commentReference.setValue(comment);
         }
@@ -219,7 +259,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         public String getTime(){
             long now = System.currentTimeMillis();
             Date date = new Date(now);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.d d HH:mm:ss");
             return sdf.format(date);
         }
     }

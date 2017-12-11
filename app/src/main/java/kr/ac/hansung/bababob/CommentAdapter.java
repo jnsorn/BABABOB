@@ -63,9 +63,6 @@ public class CommentAdapter  extends RecyclerView.Adapter<CommentAdapter.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Comment comment = mComments.get(position);
-        Log.e("jina","Commentema"+comment.getEmail());
-        Log.e("jina","Commenttext"+comment.getText());
-
         holder.emailTextView.setText(comment.getEmail());
         holder.textTextView.setText(comment.getText());
     }

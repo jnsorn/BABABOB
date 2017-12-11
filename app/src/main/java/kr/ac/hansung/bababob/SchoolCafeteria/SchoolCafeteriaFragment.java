@@ -1,9 +1,11 @@
 package kr.ac.hansung.bababob.SchoolCafeteria;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,7 +40,6 @@ public class SchoolCafeteriaFragment extends Fragment {
     private RecyclerView rvSchoolCafeteria;
     private SchoolCafeteriaAdapter adapter;
     public static ArrayList<SchoolCafeteriaMenu> schoolCafeteriaStudentMenus = new ArrayList<SchoolCafeteriaMenu>();
-    public static SchoolCafeteriaProfessorMenu[] schoolCafeteriaProfessorMenus= new SchoolCafeteriaProfessorMenu[5];
 
     public SchoolCafeteriaFragment() {
         // Required empty public constructor
@@ -57,11 +58,13 @@ public class SchoolCafeteriaFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("jina","frag onCreateView");
         View view = inflater.inflate(R.layout.fragment_school_cafeteria, container, false);
         rvSchoolCafeteria = (RecyclerView) view.findViewById(R.id.school_cafeteria_recycler_view);
         adapter = new SchoolCafeteriaAdapter(getActivity(), SchoolCafeteria.getCafeterias());
         rvSchoolCafeteria.setAdapter(adapter);
+        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(500);
+        rvSchoolCafeteria.setItemAnimator(itemAnimator);
         return view;
     }
 
@@ -71,7 +74,6 @@ public class SchoolCafeteriaFragment extends Fragment {
         //SchoolCafeteriaStudent
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("SchoolCafeteriaStudent").child("RollNoodles");
-        schoolCafeteriaStudentMenus.add(new SchoolCafeteriaMenu("면류&찌개&김밥",0));
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,54 +89,6 @@ public class SchoolCafeteriaFragment extends Fragment {
 
             }
         });
-
-//        DatabaseReference ref2 = database.getReference("SchoolCafeteriaStudent").child("Bab");
-//        schoolCafeteriaStudentMenus.add(new SchoolCafeteriaMenu("덮밥류&비빔밥",0));
-//
-//        DatabaseReference ref3 = database.getReference("SchoolCafeteriaStudent").child("FryRice");
-//        schoolCafeteriaStudentMenus.add(new SchoolCafeteriaMenu("볶음밥&오므라이스&돈까스",0));
-
-        setSchoolCafeteriaProfessorMenus();
         adapter.notifyDataSetChanged();
-    }
-
-    public void setSchoolCafeteriaProfessorMenus(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final StringBuilder builder = new StringBuilder();
-
-                try {
-                    Document doc = Jsoup.connect("http://www.hansung.ac.kr/web/www/life_03_01_t2").get();
-                    Element tbody = doc.select("table").first();
-                    Elements rows = tbody.select("tr");
-
-                    for(int i=0; i<5; i++) {
-                        Elements tds = rows.get(1).select("td");
-                        String str = tds.get(i).text();
-                        String tmp = "";
-                        for (String string : str.split(" ")) {
-                            tmp += string + " / ";
-                        }
-                        schoolCafeteriaProfessorMenus[i] = new SchoolCafeteriaProfessorMenu();
-                        schoolCafeteriaProfessorMenus[i].setLunch(new SchoolCafeteriaMenu(tmp, 0));
-                    }
-
-                    for(int i=0; i<5; i++) {
-                        Elements tds = rows.get(2).select("td");
-                        String str = tds.get(i+1).text();
-                        String tmp = "";
-                        for (String string : str.split(" ")) {
-                            if(!string.equals(""))
-                                tmp += string + " / ";
-                        }
-                        schoolCafeteriaProfessorMenus[i].setDinner(new SchoolCafeteriaMenu(tmp, 0));
-                    }
-
-                } catch (IOException e) {
-                    builder.append("Error : ").append(e.getMessage()).append("\n");
-                }
-            }
-        }).start();
     }
 }

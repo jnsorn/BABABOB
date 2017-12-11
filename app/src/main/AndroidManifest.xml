@@ -31,7 +31,8 @@
         <activity android:name=".SchoolCafeteria.SchoolCafeteriaStudentInfoActivity" />
         <activity android:name=".ConnectionActivity" />
         <activity android:name=".ReviewWriteActivity" />
-        <activity android:name=".SchoolCafeteria.SchoolCafeteriaProfessorInfoActivity"></activity>
+        <activity android:name=".SchoolCafeteria.SchoolCafeteriaProfessorInfoActivity" />
+        <activity android:name=".MyReviewActivity"></activity>
     </application>
 
 </manifest>

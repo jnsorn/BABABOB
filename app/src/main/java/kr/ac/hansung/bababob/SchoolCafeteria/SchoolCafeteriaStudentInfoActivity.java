@@ -15,12 +15,14 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
     public static ArrayList<SchoolCafeteriaMenu> cafeteriaStudentMenusNoodles = new ArrayList<SchoolCafeteriaMenu>();
     public static ArrayList<SchoolCafeteriaMenu> cafeteriaStudentMenusBab = new ArrayList<SchoolCafeteriaMenu>();
     public static ArrayList<SchoolCafeteriaMenu> cafeteriaStudentMenusFry = new ArrayList<SchoolCafeteriaMenu>();
-    Message message;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
+
+        getDataFromFirebase();
 
         setContentView(R.layout.activity_school_cafeteria_student_info);
         Intent intent = getIntent();
@@ -35,14 +37,11 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
 
         TabLayout mTab = (TabLayout) findViewById(R.id.cafeteria_tabs);
         mTab.setupWithViewPager(mViewPager);
-
-        getDataFromFirebase();
     }
 
     public void getDataFromFirebase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("SchoolCafeteriaStudent").child("RollNoodles");
-
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -95,5 +94,4 @@ public class SchoolCafeteriaStudentInfoActivity extends AppCompatActivity {
             }
         });
     }
-
 }

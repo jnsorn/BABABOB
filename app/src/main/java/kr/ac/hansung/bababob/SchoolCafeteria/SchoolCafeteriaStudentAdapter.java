@@ -2,12 +2,19 @@ package kr.ac.hansung.bababob.SchoolCafeteria;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +28,7 @@ import kr.ac.hansung.bababob.R;
 public class SchoolCafeteriaStudentAdapter extends RecyclerView.Adapter<SchoolCafeteriaStudentAdapter.ViewHolder>{
 
     private Context mContext;
+
     private List<String> mMenuGroup = new ArrayList<String>();
     private List<String> mMenuGroupDetails = new ArrayList<String>();
 
@@ -48,6 +56,9 @@ public class SchoolCafeteriaStudentAdapter extends RecyclerView.Adapter<SchoolCa
         textView1.setText(mMenuGroup.get(position));
         TextView textView2 = holder.menuGroupDetailTextView;
         textView2.setText(mMenuGroupDetails.get(position));
+        Log.e("jinaa","student menu"+position);
+        SchoolCafeteriaMenuAdapter adapter = new SchoolCafeteriaMenuAdapter(mContext,SchoolCafeteriaStudentMenu.getMenus(position));
+        holder.rvSchoolCafeteriaStudentMenu.setAdapter(adapter);
     }
 
     @Override
@@ -62,7 +73,7 @@ public class SchoolCafeteriaStudentAdapter extends RecyclerView.Adapter<SchoolCa
         private TextView menuGroupDetailTextView;
         private ImageButton menuGroupDetailBtn;
         private LinearLayout menuGroupBtnLayout;
-        private boolean isMenuGroupDetailOpen = false;
+        private boolean isMenuGroupDetailOpen = true;
         private RecyclerView rvSchoolCafeteriaStudentMenu;
 
         public ViewHolder(View itemView) {
@@ -80,12 +91,12 @@ public class SchoolCafeteriaStudentAdapter extends RecyclerView.Adapter<SchoolCa
         public void onClick(View view) {
             if(view.getId()==R.id.cafeteria_detail_button_layout || view.getId()==R.id.cafeteria_detail_button){
                 if(!isMenuGroupDetailOpen){
-                    menuGroupDetailBtn.animate().rotation(180).start();
-                    SchoolCafeteriaMenuAdapter adapter = new SchoolCafeteriaMenuAdapter(mContext,SchoolCafeteriaStudentMenu.getMenus(getLayoutPosition()));
+                    menuGroupDetailBtn.animate().rotation(0).start();
+                    SchoolCafeteriaMenuAdapter adapter = new SchoolCafeteriaMenuAdapter(mContext, SchoolCafeteriaStudentMenu.getMenus(getAdapterPosition()));
                     rvSchoolCafeteriaStudentMenu.setAdapter(adapter);
                     isMenuGroupDetailOpen = true;
                 }else if(isMenuGroupDetailOpen){
-                    menuGroupDetailBtn.animate().rotation(0).start();
+                    menuGroupDetailBtn.animate().rotation(180).start();
                     rvSchoolCafeteriaStudentMenu.setAdapter(null);
                     isMenuGroupDetailOpen = false;
                 }
