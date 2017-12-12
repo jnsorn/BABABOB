@@ -18,6 +18,7 @@ public class Review {
     private float totalScore;
 
     public Review() {
+        this.image = null;
 
     }
 
